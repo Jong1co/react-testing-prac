@@ -3,30 +3,38 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import HabitAddForm from "../habitAddForm";
 import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 
 describe("HabitAddForm", () => {
-  let onAdd;
-  let input;
-  let button;
-
-  beforeEach(() => {
-    onAdd = jest.fn();
-    render(<HabitAddForm onAdd={onAdd} />);
-    input = screen.getByPlaceholderText("Habit");
-    button = screen.getByText("Add");
+  it("renders", () => {
+    const component = renderer.create(<HabitAddForm onAdd={jest.fn()} />);
+    expect(component.toJSON()).toMatchSnapshot();
   });
 
-  it("calls onAdd when button is clicked", () => {
-    userEvent.type(input, "New Habit");
-    userEvent.click(button);
+  describe("Form Submit", () => {
+    let onAdd;
+    let input;
+    let button;
 
-    expect(onAdd).toHaveBeenCalledWith("New Habit");
-  });
+    beforeEach(() => {
+      onAdd = jest.fn();
+      render(<HabitAddForm onAdd={onAdd} />);
+      input = screen.getByPlaceholderText("Habit");
+      button = screen.getByText("Add2");
+    });
 
-  it("does not call onAdd when the habit is empty", () => {
-    userEvent.type(input, "");
-    userEvent.click(button);
+    it("calls onAdd when button is clicked", () => {
+      userEvent.type(input, "New Habit");
+      userEvent.click(button);
 
-    expect(onAdd).toHaveBeenCalledTimes(0);
+      expect(onAdd).toHaveBeenCalledWith("New Habit");
+    });
+
+    it("does not call onAdd when the habit is empty", () => {
+      userEvent.type(input, "");
+      userEvent.click(button);
+
+      expect(onAdd).toHaveBeenCalledTimes(0);
+    });
   });
 });
