@@ -59,6 +59,7 @@ describe("HabitPresenter", () => {
       const updateHabits = presenter.getHabits();
 
       expect(habits[0]).toBe(updateHabits[0]);
+      expect(habits[1]).toBe(updateHabits[1]);
     });
   });
 });
